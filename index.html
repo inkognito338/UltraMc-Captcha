@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UltraMc Captcha</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+    <div class="captcha-container" id="captchaContainer">
+        <form id="captchaForm">
+            <input type="hidden" name="nickname" id="nickname" value="">
+            <input type="hidden" name="server" id="server" value="">
+            <div class="g-recaptcha" data-sitekey="6LdVW-ApAAAAAO3lKOFbYnHJ6tkMv3SHezr4M5tn" data-callback="onCaptchaFilled"></div>
+        </form>
+        <div id="responseMessage" style="margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        function onCaptchaFilled(response) {
+            document.getElementById('captchaForm').setAttribute('data-captcha-response', response);
+            submitForm(); // Автоматическая отправка формы после прохождения капчи
+        }
+
+        function submitForm() {
+            var form = document.getElementById('captchaForm');
+            var formData = new FormData(form);
+
+            fetch('webcaptcha.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('responseMessage').innerHTML = data;
+                if (data !== 'Вы не прошли проверку reCAPTCHA.') {
+                    form.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+        }
+
+        // Получаем значения из URL-параметров и вставляем их в скрытые поля формы
+        window.onload = function() {
+            var params = new URLSearchParams(window.location.search);
+            var nickname = params.get('nickname');
+            var server = params.get('server');
+            document.getElementById('nickname').value = nickname;
+            document.getElementById('server').value = server;
+        };
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</body>
+</html>
