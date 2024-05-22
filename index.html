@@ -27,7 +27,7 @@
             var form = document.getElementById('captchaForm');
             var formData = new FormData(form);
 
-            fetch('webcaptcha.php', {
+            fetch('https://service.ultramc.xyz/webcaptcha.php', {
                 method: 'POST',
                 body: formData
             })
