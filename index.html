@@ -50,6 +50,14 @@
             var server = params.get('server');
             document.getElementById('nickname').value = nickname;
             document.getElementById('server').value = server;
+
+            // Проверка браузера
+            var userAgent = navigator.userAgent.toLowerCase();
+            if (userAgent.includes('yabrowser')) {
+                document.getElementById('captchaForm').style.display = 'none';
+                document.getElementById('responseMessage').innerHTML = 
+                    'Ваш браузер Яндекс не поддерживается. Пожалуйста, используйте <a href="https://www.google.com/chrome/">Google Chrome</a>.';
+            }
         };
     </script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
